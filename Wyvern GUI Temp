@@ -1,0 +1,110 @@
+using BepInEx;
+using UnityEngine;
+
+namespace JOINJIMANDCOKESSEVER
+{
+    [BepInPlugin("JIMCOKESERVER", "discord.gg/jimandcoke", "1.0.0.0")]
+    public class Plugin : BaseUnityPlugin
+    {
+        private Rect windowRect = new Rect(20, 20, 206, 215);
+        private bool getGuardian = false;
+        private bool splashHand1 = false;
+        private bool splashHand2 = false;
+        private bool lagAll = false;
+        private bool lagRoom = false;
+
+        public void OnGUI()
+        {
+            GUIStyle headerStyle = new GUIStyle()
+            {
+                normal = { background = MakeRoundedTexture(190, 170, new Color(0.14f * 0.66f, 0.14f * 0.66f, 0.14f * 0.66f), 10), textColor = Color.white },
+                alignment = TextAnchor.UpperCenter,
+            };
+            windowRect = GUILayout.Window(384, windowRect, MainGUI, "<size=26><color=gray>Wyvern Ex</color></size>", headerStyle);
+        }
+
+        public void MainGUI(int windowID)
+        {
+            GUIStyle buttonStyle1 = new GUIStyle()
+            {
+                fontSize = 16,
+                fixedHeight = 26,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { background = MakeRoundedTexture(165, 26, new Color(0.0f, 0.2f, 0.0f), 11), textColor = Color.white },
+                hover = { background = MakeRoundedTexture(165, 26, new Color(0.0f, 0.2f, 0.0f), 11), textColor = Color.white },
+                active = { background = MakeRoundedTexture(165, 26, new Color(0.0f, 0.2f, 0.0f), 11), textColor = Color.white },
+                border = new RectOffset(8, 8, 8, 8)
+            };
+
+            GUIStyle buttonStyle2 = new GUIStyle()
+            {
+                fontSize = 16,
+                fixedHeight = 26,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { background = MakeRoundedTexture(165, 26, new Color(0.14f, 0.14f, 0.14f), 11), textColor = Color.white},
+                hover = { background = MakeRoundedTexture(165, 26, new Color(0.14f, 0.14f, 0.14f), 11), textColor = Color.white},
+                active = { background = MakeRoundedTexture(165, 26, new Color(0.14f, 0.14f, 0.14f), 11), textColor = Color.white},
+                border = new RectOffset(8, 8, 8, 8)
+            };
+
+            GUILayout.Space(34);
+            if (GUILayout.Button("Get Guardian", getGuardian ? buttonStyle1 : buttonStyle2))
+            {
+                getGuardian = !getGuardian;
+            }
+            GUILayout.Space(5);
+            if (GUILayout.Button("Hand Splash [Left Grip]", splashHand1 ? buttonStyle1 : buttonStyle2))
+            {
+                splashHand1 = !splashHand1;
+            }
+            GUILayout.Space(5);
+            if (GUILayout.Button("Hand Splash [Right Trigger]", splashHand2 ? buttonStyle1 : buttonStyle2))
+            {
+               splashHand2 = !splashHand2;
+            }
+            GUILayout.Space(5);
+            if (GUILayout.Button("Lag All", lagAll ? buttonStyle1 : buttonStyle2))
+            {
+                lagAll = !lagAll;
+            }
+            GUILayout.Space(5);
+            if (GUILayout.Button("Lag Room", lagRoom ? buttonStyle1 : buttonStyle2))
+            {
+                lagRoom = !lagRoom;
+            }
+            GUILayout.Space(7);
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Previous", buttonStyle2, GUILayout.Width(74)))
+            {
+                
+            }
+            if (GUILayout.Button(" Home", buttonStyle2, GUILayout.Width(63)))
+            {
+
+            }
+            if (GUILayout.Button("Next", buttonStyle2, GUILayout.Width(66)))
+            {
+
+            }
+            GUILayout.EndHorizontal();
+            GUI.DragWindow();
+        }
+
+        public Texture2D MakeRoundedTexture(int width, int height, Color col, int radius)
+        {
+            Texture2D texture2D = new Texture2D(width, height);
+            Color[] array = new Color[width * height];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    bool flag = (j < radius && i < radius && Mathf.Sqrt((float)((j - radius) * (j - radius) + (i - radius) * (i - radius))) > (float)radius) || (j > width - radius && i < radius && Mathf.Sqrt((float)((j - (width - radius)) * (j - (width - radius)) + (i - radius) * (i - radius))) > (float)radius) || (j < radius && i > height - radius && Mathf.Sqrt((float)((j - radius) * (j - radius) + (i - (height - radius)) * (i - (height - radius)))) > (float)radius) || (j > width - radius && i > height - radius && Mathf.Sqrt((float)((j - (width - radius)) * (j - (width - radius)) + (i - (height - radius)) * (i - (height - radius)))) > (float)radius);
+                    array[i * width + j] = (flag ? new Color(col.r, col.g, col.b, 0f) : col);
+                }
+            }
+            texture2D.SetPixels(array);
+            texture2D.Apply();
+            return texture2D;
+        }
+    }
+}
